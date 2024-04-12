@@ -9,7 +9,7 @@ const auth = useAuthStore();
 function getToken(){
   const token = window.localStorage.getItem('token')
   if(token){
-    router.push({name: 'Feedbacks'})
+    router.push({name: 'Feedback'})
   }
 }
 onMounted(getToken);

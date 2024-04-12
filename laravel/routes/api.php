@@ -22,4 +22,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/user/generate', [\App\Http\Controllers\UserTokenController::class, 'generate'])->name('user.generate');
 });
-
+Route::get('/feedbacks/summary', [\App\Http\Controllers\FeedbackController::class, 'getSummary'])->name('feedbacks.getSummary');
