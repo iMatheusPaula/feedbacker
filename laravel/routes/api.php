@@ -20,8 +20,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return $request->user();
     })->name('user');
 
-    Route::post('/user/generate', [\App\Http\Controllers\UserTokenController::class, 'generate'])->name('user.generate');
+    Route::post('/user/generate', [\App\Http\Controllers\UserTokenController::class, 'generate'])
+        ->name('user.generate');
+
+    Route::get('/feedbacks', [\App\Http\Controllers\FeedbackController::class, 'getAll'])
+        ->name('feedbacks.getAll');
 
 });
 
-Route::get('/feedbacks/summary', [\App\Http\Controllers\FeedbackController::class, 'getSummary'])->name('feedbacks.getSummary');
+Route::get('/feedbacks/summary', [\App\Http\Controllers\FeedbackController::class, 'getSummary'])
+    ->name('feedbacks.getSummary');

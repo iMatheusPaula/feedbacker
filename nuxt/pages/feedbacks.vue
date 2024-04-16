@@ -1,21 +1,38 @@
-<script setup lang="ts">
+<script setup>
 definePageMeta({
   middleware: 'auth'
 });
 onMounted(async () => {
+  await fetchFeedbacks();
 });
 const state = reactive({
   isLoading: false,
   feedbacks: [],
-  hasErrors: false
+  hasErrors: false,
+  currentFeedbackType: '',
+  pagination: {
+    limit: 5,
+    offset: 0
+  }
 });
 const defaultPagination = {
   limit: 5,
   offset: 0
 };
-async function getAll(){
-
-}
+async function fetchFeedbacks(){
+  state.isLoading = true;
+  try{
+    const { data } = await useApiFetch('/api/feedbacks');
+    console.log(data.value)
+    state.feedbacks = data.value;
+    state.pagination = data.value.pagination;
+    state.isLoading = false
+  }
+  catch(error){
+    state.hasErrors = !!error
+    state.isLoading = false
+  }
+};
 </script>
 
 <template>
@@ -34,13 +51,19 @@ async function getAll(){
         </suspense>
       </div>
       <div class="px-10 pt-20 col-span-3">
-        <p class="text-lg text-center text-gray-800 font-regular">
+        <p v-if="state.hasErrors" class="text-lg text-center text-gray-800 font-regular">
           Aconteceu um erro ao carregar os feedbacks 🥺
         </p>
-        <p class="text-lg text-center text-gray-800 font-regular">
+        <p v-if="!state.feedbacks && !state.isLoading" class="text-lg text-center text-gray-800 font-regular">
           Ainda nenhum feedback recebido 🥺
         </p>
-
+        <feedbacks-card
+            v-for="(feedback, index) in state.feedbacks"
+            :key="feedback.id"
+            :is-opened="index === 0"
+            :feedback="feedback"
+            class="mb-8"
+        />
       </div>
     </div>
   </div>
