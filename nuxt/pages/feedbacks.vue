@@ -7,6 +7,7 @@ onMounted(async () => {
 });
 const state = reactive({
   isLoading: false,
+  isLoadingFeedback: false,
   feedbacks: [],
   hasErrors: false,
   currentFeedbackType: '',
@@ -23,16 +24,37 @@ async function fetchFeedbacks(){
   state.isLoading = true;
   try{
     const { data } = await useApiFetch('/api/feedbacks');
-    console.log(data.value)
+    console.log(data.value);
     state.feedbacks = data.value;
     state.pagination = data.value.pagination;
-    state.isLoading = false
+    state.isLoading = false;
   }
   catch(error){
-    state.hasErrors = !!error
-    state.isLoading = false
+    state.hasErrors = !!error;
+    state.isLoading = false;
   }
 };
+
+async function changeFeedbacksType(type){
+  try{
+    state.isLoadingFeedback = true;
+    // state.pagination.offset = 0;
+    // state.pagination.limit = 5
+    state.currentFeedbackType = type;
+    const { data } = await useApiFetch('/api/feedbacks', {
+      query: {type: type}
+    });
+    state.feedbacks = data.value;
+    state.pagination = data.value.pagination;
+    state.isLoadingFeedback = false;
+  }
+  catch (error){
+    state.hasErrors = !!error;
+    state.isLoadingFeedback = false;
+  }
+};
+
+
 </script>
 
 <template>
@@ -43,7 +65,7 @@ async function fetchFeedbacks(){
         <h1 class="text-3xl font-black text-brand-darkgray">Listagem</h1>
         <suspense>
           <template #default>
-            <feedbacks-filters class="mt-8 animate__animated animate__fadeIn animate__faster" />
+            <feedbacks-filters @select="changeFeedbacksType" class="mt-8 animate__animated animate__fadeIn animate__faster" />
           </template>
           <template #fallback>
             Carregando...
@@ -54,10 +76,12 @@ async function fetchFeedbacks(){
         <p v-if="state.hasErrors" class="text-lg text-center text-gray-800 font-regular">
           Aconteceu um erro ao carregar os feedbacks 🥺
         </p>
-        <p v-if="!state.feedbacks && !state.isLoading" class="text-lg text-center text-gray-800 font-regular">
+        <p v-if="!state.feedbacks.length && !state.isLoading" class="text-lg text-center text-gray-800 font-regular">
           Ainda nenhum feedback recebido 🥺
         </p>
+        <p v-if="state.isLoading || state.isLoadingFeedback">Carregando..</p>
         <feedbacks-card
+            v-else
             v-for="(feedback, index) in state.feedbacks"
             :key="feedback.id"
             :is-opened="index === 0"

@@ -14,15 +14,20 @@ const COLORS = {
 }
 const state = reactive({
   hasErrors: false,
+  isLoading: false,
   filters: [{label: null, amount: null}]
 });
 try {
+  state.isLoading = true;
   const {data} = await useApiFetch('/api/feedbacks/summary');
   state.filters = applyFiltersStructure(data.value);
+  state.isLoading = false;
 }
 catch (error){
+  state.isLoading = true;
   state.hasErrors = !!error;
   state.filters = applyFiltersStructure({all: 0, issue: 0, idea: 0, other: 0});
+  state.isLoading = false;
 }
 function applyFiltersStructure (summary){
   return Object.keys(summary).reduce((acc, cur) => {
@@ -39,14 +44,17 @@ function applyFiltersStructure (summary){
     return [...acc, currentFilter]
   }, [])
 }
-function handleSelect ({label}) {
+function handleSelect ({ type }) {
+  if(state.isLoading){
+    return
+  }
   state.filters = state.filters.map((filter) => {
-    if(filter.label === label){
+    if(filter.type === type){
       return {...filter, active: true}
     }
     return {...filter, active: false}
   });
-  emit('select', label);
+  emit('select', type);
 }
 </script>
 

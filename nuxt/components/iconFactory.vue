@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { IconLoading, IconCopy } from "#components"
+import { IconLoading, IconCopy, IconChevronDown } from "#components"
 
 export default {
-  components: { IconLoading, IconCopy },
+  components: { IconLoading, IconCopy, IconChevronDown },
   props: {
     name: {
       type: String,
