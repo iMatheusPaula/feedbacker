@@ -4,6 +4,10 @@ definePageMeta({
 });
 onMounted(async () => {
   await fetchFeedbacks();
+  window.addEventListener('scroll', handleScroll, false);
+});
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll, false);
 });
 const state = reactive({
   isLoading: false,
@@ -12,20 +16,34 @@ const state = reactive({
   hasErrors: false,
   currentFeedbackType: '',
   pagination: {
-    limit: 5,
+    limit: 3,
     offset: 0
   }
 });
 const defaultPagination = {
-  limit: 5,
+  limit: 3,
   offset: 0
 };
-async function fetchFeedbacks(){
+async function handleScroll(){
+  const isBottomOfWindow = Math.ceil(
+      document.documentElement.scrollTop + window.innerHeight) >= document.documentElement.scrollHeight;
+  if(state.isLoading) return;
+  if(!isBottomOfWindow) return;
+  if (state.feedbacks.length  >= state.pagination.total) return;
+  await fetchFeedbacks({});
+}
+async function fetchFeedbacks(options){
   state.isLoading = true;
   try{
-    const { data } = await useApiFetch('/api/feedbacks');
-    console.log(data.value);
-    state.feedbacks = data.value;
+    const { data } = await useApiFetch('/api/feedbacks',{
+      query: {
+        ...state.pagination,
+        type: state.currentFeedbackType ? state.currentFeedbackType : 'all'
+      }
+    });
+    if(data.value.length){
+      state.feedbacks.push(...data.value);
+    }
     state.pagination = data.value.pagination;
     state.isLoading = false;
   }
@@ -33,8 +51,7 @@ async function fetchFeedbacks(){
     state.hasErrors = !!error;
     state.isLoading = false;
   }
-};
-
+}
 async function changeFeedbacksType(type){
   try{
     state.isLoadingFeedback = true;
@@ -48,19 +65,16 @@ async function changeFeedbacksType(type){
     state.pagination = data.value.pagination;
     state.isLoadingFeedback = false;
   }
-  catch (error){
+  catch (error) {
     state.hasErrors = !!error;
     state.isLoadingFeedback = false;
   }
-};
-
-
+}
 </script>
-
 <template>
   <banner-section title="Feedbacks" text="Detalhes de todos os feedbacks recebidos." />
   <div class="flex justify-center w-full pb-20">
-    <div class="w-4/5 max-w-6xl py-10 grid-cols-4 gap-2">
+    <div class="w-4/5 max-w-6xl py-10 grid grid-cols-4 gap-2">
       <div>
         <h1 class="text-3xl font-black text-brand-darkgray">Listagem</h1>
         <suspense>
@@ -76,7 +90,7 @@ async function changeFeedbacksType(type){
         <p v-if="state.hasErrors" class="text-lg text-center text-gray-800 font-regular">
           Aconteceu um erro ao carregar os feedbacks 🥺
         </p>
-        <p v-if="!state.feedbacks.length && !state.isLoading" class="text-lg text-center text-gray-800 font-regular">
+        <p v-if="!state.feedbacks.length && !state.isLoading && !state.hasErrors" class="text-lg text-center text-gray-800 font-regular">
           Ainda nenhum feedback recebido 🥺
         </p>
         <p v-if="state.isLoading || state.isLoadingFeedback">Carregando..</p>

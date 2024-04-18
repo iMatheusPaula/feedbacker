@@ -66,16 +66,14 @@ function handleSelect ({ type }) {
         @click="() => handleSelect(filter)" class="flex items-center justify-between px-4 py-1 rounded cursor-pointer"
     >
       <div class="flex items-center">
-        <span :class="filter.color.bg" class="inline-block w-2 h-2 mr-2 rounded-full"/>
+        <span :class="filter.color.bg" class="inline-block w-2 h-2 mr-2 rounded-full" />
         {{ filter.label }}
-        <span :class="filter.active ? filter.color.text : 'text-brand-graydark'" class="font-bold">
-          {{ filter.amount }}
-        </span>
       </div>
+      <span :class="filter.active ? filter.color.text : 'text-brand-graydark'" class="font-bold">
+        {{ filter.amount }}
+      </span>
+
     </li>
   </ul>
 </div>
 </template>
-<style scoped>
-
-</style>
