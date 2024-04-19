@@ -1,39 +1,59 @@
 <script setup>
+import {useToast} from "vue-toastification";
+
 definePageMeta({
   middleware: 'auth'
 });
+const toast = useToast();
+const state = reactive({
+  isLoading: false,
+  isLoadingMore: false,
+  feedbacks: [],
+  hasErrors: false,
+  currentFeedbackType: '',
+  pagination: {
+    limit: 2,
+    offset: 0,
+    total: 0
+  }
+});
 onMounted(async () => {
-  await fetchFeedbacks();
+  console.log(state.pagination);
+  await fetchOnMounted();
   window.addEventListener('scroll', handleScroll, false);
 });
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll, false);
 });
-const state = reactive({
-  isLoading: false,
-  isLoadingFeedback: false,
-  feedbacks: [],
-  hasErrors: false,
-  currentFeedbackType: '',
-  pagination: {
-    limit: 3,
-    offset: 0
-  }
-});
-const defaultPagination = {
-  limit: 3,
-  offset: 0
-};
 async function handleScroll(){
-  const isBottomOfWindow = Math.ceil(
-      document.documentElement.scrollTop + window.innerHeight) >= document.documentElement.scrollHeight;
-  if(state.isLoading) return;
-  if(!isBottomOfWindow) return;
-  if (state.feedbacks.length  >= state.pagination.total) return;
-  await fetchFeedbacks({});
+  if(!(Math.ceil(
+      document.documentElement.scrollTop + window.innerHeight) >= document.documentElement.scrollHeight)
+  ) return;
+  if(state.isLoading || state.isLoadingMore) return;
+  if(state.feedbacks.length >= state.pagination.total){
+    toast.warning("Todos os feedbacks foram carregados.")
+    return
+  };
+  state.isLoadingMore = true;
+  state.pagination.offset += 2;
+  await fetchFeedbacks();
+  state.isLoadingMore = false;
 }
-async function fetchFeedbacks(options){
+async function fetchFeedbacksForType(type){
   state.isLoading = true;
+  state.currentFeedbackType = type;
+  state.feedbacks = [];
+  state.pagination.limit = 2;
+  state.pagination.offset = 0;
+  await fetchFeedbacks();
+  state.isLoading = false;
+}
+async function fetchOnMounted(){
+  state.isLoading = true;
+  await fetchFeedbacks();
+  state.isLoading = false;
+}
+async function fetchFeedbacks(){
   try{
     const { data } = await useApiFetch('/api/feedbacks',{
       query: {
@@ -41,33 +61,11 @@ async function fetchFeedbacks(options){
         type: state.currentFeedbackType ? state.currentFeedbackType : 'all'
       }
     });
-    if(data.value.length){
-      state.feedbacks.push(...data.value);
-    }
-    state.pagination = data.value.pagination;
-    state.isLoading = false;
+    if(data.value.results.length) state.feedbacks.push(...data.value.results);
+    if(data.value.pagination) state.pagination = data.value.pagination;
   }
   catch(error){
     state.hasErrors = !!error;
-    state.isLoading = false;
-  }
-}
-async function changeFeedbacksType(type){
-  try{
-    state.isLoadingFeedback = true;
-    // state.pagination.offset = 0;
-    // state.pagination.limit = 5
-    state.currentFeedbackType = type;
-    const { data } = await useApiFetch('/api/feedbacks', {
-      query: {type: type}
-    });
-    state.feedbacks = data.value;
-    state.pagination = data.value.pagination;
-    state.isLoadingFeedback = false;
-  }
-  catch (error) {
-    state.hasErrors = !!error;
-    state.isLoadingFeedback = false;
   }
 }
 </script>
@@ -79,7 +77,7 @@ async function changeFeedbacksType(type){
         <h1 class="text-3xl font-black text-brand-darkgray">Listagem</h1>
         <suspense>
           <template #default>
-            <feedbacks-filters @select="changeFeedbacksType" class="mt-8 animate__animated animate__fadeIn animate__faster" />
+            <feedbacks-filters @select="fetchFeedbacksForType" class="mt-8 animate__animated animate__fadeIn animate__faster" />
           </template>
           <template #fallback>
             Carregando...
@@ -93,7 +91,7 @@ async function changeFeedbacksType(type){
         <p v-if="!state.feedbacks.length && !state.isLoading && !state.hasErrors" class="text-lg text-center text-gray-800 font-regular">
           Ainda nenhum feedback recebido 🥺
         </p>
-        <p v-if="state.isLoading || state.isLoadingFeedback">Carregando..</p>
+        <p v-if="state.isLoading">Carregando..</p>
         <feedbacks-card
             v-else
             v-for="(feedback, index) in state.feedbacks"
@@ -102,11 +100,8 @@ async function changeFeedbacksType(type){
             :feedback="feedback"
             class="mb-8"
         />
+        <p v-if="state.isLoadingMore">Carregando..</p>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

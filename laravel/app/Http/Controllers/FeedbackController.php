@@ -28,11 +28,11 @@ class FeedbackController extends Controller
         /* TYPE PARAM */
         $type = strtoupper(filter_var($request->query("type"), FILTER_SANITIZE_SPECIAL_CHARS));
         /* LIMIT PARAM */
-        $limit = filter_var(
+        $limit = (int)filter_var(
             $request->query("limit") ? $request->query("limit") : 5,
             FILTER_SANITIZE_NUMBER_INT);
         /* OFFSET PARAM */
-        $offset = filter_var(
+        $offset = (int)filter_var(
             $request->query("offset") ? $request->query("offset") : 0,
             FILTER_SANITIZE_NUMBER_INT);
         if(!$type || $type == "ALL"){
@@ -41,6 +41,9 @@ class FeedbackController extends Controller
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
+            $count = DB::table('feedbacks')
+                ->where('fingerprint', $userLogged)
+                ->count();
         }
         else{
             $feedbacks = DB::table('feedbacks')
@@ -49,7 +52,19 @@ class FeedbackController extends Controller
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
+            $count = DB::table('feedbacks')
+                ->where('fingerprint', $userLogged)
+                ->where('type', $type)
+                ->count();
         }
-        return response()->json($feedbacks, Response::HTTP_OK);
+        $return = [
+            "results" => $feedbacks,
+            "pagination" => [
+                "offset" => $offset,
+                "limit" => $limit,
+                "total" => $count,
+            ]
+        ];
+        return response()->json($return, Response::HTTP_OK);
     }
 }
