@@ -1,18 +1,7 @@
 <script setup lang="ts">
-import {onMounted} from "vue";
-import {useRouter} from "vue-router";
-
-// CONSTANTS
-const router = useRouter();
-const auth = useAuthStore();
-
-function getToken(){
-  const token = window.localStorage.getItem('token')
-  if(token){
-    router.push({name: 'Feedback'})
-  }
-}
-onMounted(getToken);
+definePageMeta({
+  middleware: 'only-guest'
+});
 </script>
 <template>
   <!--  BANNER SECTION-->
@@ -56,8 +45,6 @@ onMounted(getToken);
               bg-brand-main
               focus:outline-none">
           Nos mande um e-mail!
-
-          {{  auth.user }}
         </a>
       </div>
     </div>

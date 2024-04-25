@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useToast} from "vue-toastification";
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'only-auth'
 });
 const auth = useAuthStore();
 const toast = useToast();

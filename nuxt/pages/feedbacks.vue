@@ -2,7 +2,7 @@
 import {useToast} from "vue-toastification";
 
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'only-auth'
 });
 const toast = useToast();
 const state = reactive({

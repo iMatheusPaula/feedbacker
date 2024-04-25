@@ -3,7 +3,7 @@ import { reactive} from "vue";
 import { useField } from "vee-validate";
 import { useToast } from "vue-toastification";
 import useModal from "/assets/js/useModal.js";
-import { validateEmptyAndLength6, validateEmptyAndEmail, validadePassword } from "/assets/js/validators.js";
+import { validateEmptyAndLength, validateEmail } from "@/assets/js/validators";
 import Icon from '/components/iconFactory.vue'
 
 // const`s
@@ -12,15 +12,13 @@ const toast = useToast();
 const auth = useAuthStore();
 
 //vee-validate
-const {value: nameValue, errorMessage: nameErrorMessage} = useField('name', validateEmptyAndLength6);
-const {value: emailValue, errorMessage: emailErrorMessage} = useField('email', validateEmptyAndEmail);
-const {value: passwordValue, errorMessage: passwordErrorMessage} = useField('password', validateEmptyAndLength6);
+const {value: nameValue, errorMessage: nameErrorMessage} = useField('name', validateEmptyAndLength);
+const {value: emailValue, errorMessage: emailErrorMessage} = useField('email', validateEmail);
+const {value: passwordValue, errorMessage: passwordErrorMessage} = useField('password', validateEmptyAndLength);
 const {value: rePasswordValue, errorMessage: rePasswordErrorMessage} = useField('rePassword', value => {
-  if(value != state.password.value){
-    return "As senhas precisam ser iguais"
-  }
-  return true
-})
+  if(value !== state.password.value) return "As senhas precisam ser iguais";
+  return true;
+});
 
 const state = reactive({
   hasErrors: false,

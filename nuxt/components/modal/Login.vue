@@ -2,7 +2,7 @@
 import { reactive } from "vue";
 import useModal from "/assets/js/useModal.js";
 import { useField } from "vee-validate";
-import { validateEmptyAndLength6, validateEmptyAndEmail } from "/assets/js/validators.js";
+import { validateEmptyAndLength, validateEmail } from "@/assets/js/validators";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 
@@ -10,12 +10,12 @@ import { useToast } from "vue-toastification";
 const {
   value: emailValue,
   errorMessage: emailErrorMessage
-} = useField('email', validateEmptyAndEmail);
+} = useField('email', validateEmail);
 
 const {
   value: passwordValue,
   errorMessage: passwordErrorMessage
-} = useField('password', validateEmptyAndLength6);
+} = useField('password', validateEmptyAndLength);
 
 const modal = useModal();
 const router = useRouter();
