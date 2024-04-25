@@ -18,8 +18,7 @@ const state = reactive({
   }
 });
 onMounted(async () => {
-  console.log(state.pagination);
-  await fetchOnMounted();
+  await fetchFeedbacksForType('all');
   window.addEventListener('scroll', handleScroll, false);
 });
 onUnmounted(() => {
@@ -31,9 +30,9 @@ async function handleScroll(){
   ) return;
   if(state.isLoading || state.isLoadingMore) return;
   if(state.feedbacks.length >= state.pagination.total){
-    toast.warning("Todos os feedbacks foram carregados.")
+    toast.warning("Todos os feedbacks foram carregados.", { timeout: 2000 })
     return
-  };
+  }
   state.isLoadingMore = true;
   state.pagination.offset += 2;
   await fetchFeedbacks();
@@ -45,11 +44,6 @@ async function fetchFeedbacksForType(type){
   state.feedbacks = [];
   state.pagination.limit = 2;
   state.pagination.offset = 0;
-  await fetchFeedbacks();
-  state.isLoading = false;
-}
-async function fetchOnMounted(){
-  state.isLoading = true;
   await fetchFeedbacks();
   state.isLoading = false;
 }

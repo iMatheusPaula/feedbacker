@@ -22,9 +22,54 @@ class FeedbackController extends Controller
         return response()->json($feedbacks, Response::HTTP_OK);
     }
 
+//    public function getAll(Request $request)
+//    {
+//        $userLogged = Auth::id();
+//        /* TYPE PARAM */
+//        $type = strtoupper(filter_var($request->query("type"), FILTER_SANITIZE_SPECIAL_CHARS));
+//        /* LIMIT PARAM */
+//        $limit = (int)filter_var(
+//            $request->query("limit") ? $request->query("limit") : 5,
+//            FILTER_SANITIZE_NUMBER_INT);
+//        /* OFFSET PARAM */
+//        $offset = (int)filter_var(
+//            $request->query("offset") ? $request->query("offset") : 0,
+//            FILTER_SANITIZE_NUMBER_INT);
+//        if(!$type || $type == "ALL"){
+//            $feedbacks = DB::table('feedbacks')
+//                ->where('fingerprint', $userLogged)
+//                ->offset($offset)
+//                ->limit($limit)
+//                ->get();
+//            $count = DB::table('feedbacks')
+//                ->where('fingerprint', $userLogged)
+//                ->count();
+//        }
+//        else{
+//            $feedbacks = DB::table('feedbacks')
+//                ->where('fingerprint', $userLogged)
+//                ->where('type', $type)
+//                ->offset($offset)
+//                ->limit($limit)
+//                ->get();
+//            $count = DB::table('feedbacks')
+//                ->where('fingerprint', $userLogged)
+//                ->where('type', $type)
+//                ->count();
+//        }
+//        $return = [
+//            "results" => $feedbacks,
+//            "pagination" => [
+//                "offset" => $offset,
+//                "limit" => $limit,
+//                "total" => $count,
+//            ]
+//        ];
+//        return response()->json($return, Response::HTTP_OK);
+//    }
+
     public function getAll(Request $request)
     {
-        $userLogged = Auth::id();
         /* TYPE PARAM */
         $type = strtoupper(filter_var($request->query("type"), FILTER_SANITIZE_SPECIAL_CHARS));
         /* LIMIT PARAM */
@@ -35,36 +80,24 @@ class FeedbackController extends Controller
         $offset = (int)filter_var(
             $request->query("offset") ? $request->query("offset") : 0,
             FILTER_SANITIZE_NUMBER_INT);
-        if(!$type || $type == "ALL"){
-            $feedbacks = DB::table('feedbacks')
-                ->where('fingerprint', $userLogged)
-                ->offset($offset)
-                ->limit($limit)
-                ->get();
-            $count = DB::table('feedbacks')
-                ->where('fingerprint', $userLogged)
-                ->count();
+        /* QUERY */
+        $query = Feedback::where('fingerprint', Auth::id())->orderByDesc('created_at');
+        if(!$type || $type === 'ALL'){
+            $feedbacks = $query->limit($limit)->offset($offset)->get();
+            $total = $query->count();
+        } else {
+            $feedbacks = $query->where('type', $type)->limit($limit)->offset($offset)->get();
+            $total = $query->where('type', $type)->count();
         }
-        else{
-            $feedbacks = DB::table('feedbacks')
-                ->where('fingerprint', $userLogged)
-                ->where('type', $type)
-                ->offset($offset)
-                ->limit($limit)
-                ->get();
-            $count = DB::table('feedbacks')
-                ->where('fingerprint', $userLogged)
-                ->where('type', $type)
-                ->count();
-        }
-        $return = [
+
+        $response = [
             "results" => $feedbacks,
             "pagination" => [
                 "offset" => $offset,
                 "limit" => $limit,
-                "total" => $count,
+                "total" => $total,
             ]
         ];
-        return response()->json($return, Response::HTTP_OK);
+        return response()->json($response, Response::HTTP_OK);
     }
 }
