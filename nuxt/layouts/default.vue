@@ -31,7 +31,7 @@ function handleCreateAccount(){
               <NuxtLink to="/feedbacks">Feedbacks</NuxtLink>
             </li>
             <li class="px-6 py-2 font-bold bg-white rounded-full cursor-pointers text-brand-main focus:outline-none">
-              {{ auth.user?.name }} <span class="cursor-pointer" @click="auth.logout">(Sair)</span>
+              {{ auth.user?.name }} <span class="cursor-pointer" @click="auth.logout" id="btnLogout">(Sair)</span>
             </li>
           </ul>
         </div>

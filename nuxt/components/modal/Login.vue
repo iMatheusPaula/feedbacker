@@ -64,11 +64,11 @@ async function HandleSubmit(){
           class="block w-full px-4 py-3 mt-1 text-lg bg-gray-100 border-2 rounded text-black"
           placeholder="email@dominio.com" v-model="state.email.value"
       >
-      <span class="block font-medium text-brand-danger" v-if="!!state.email.errorMessage">
+      <span id="emailError" class="block font-medium text-brand-danger" v-if="!!state.email.errorMessage">
         {{ state.email.errorMessage }}
       </span>
       <!--Password-->
-      <label for="password" class="block mt-9">
+      <label id="passwordError" for="password" class="block mt-9">
         <span class="text-lg font-medium text-gray-800">Senha</span>
       </label>
       <input name="password" type="password" :class="{'border-brand-danger': !!state.password.errorMessage}"
