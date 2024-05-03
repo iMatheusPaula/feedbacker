@@ -2,6 +2,13 @@
 definePageMeta({
   middleware: 'only-guest'
 });
+import useModal from "@/assets/js/useModal";
+const modal = useModal();
+function handleCreateAccount() {
+  modal.open({
+    component: 'ModalCreateAccount'
+  });
+}
 </script>
 <template>
   <!--  BANNER SECTION-->
@@ -18,7 +25,11 @@ definePageMeta({
           Receba ideias, reclamações e feedbacks com um <br class="hidden lg:inline-block">
           simples widget na página.
         </p>
-        <button class="px-6 mt-10 py-2 font-bold bg-white rounded-full text-brand-main focus:outline-none">
+        <button
+            id="home-btn-create-account"
+            @click="handleCreateAccount()"
+            class="px-6 mt-10 py-2 font-bold bg-white rounded-full text-brand-main focus:outline-none"
+        >
           Crie uma conta grátis
         </button>
       </div>
@@ -34,16 +45,7 @@ definePageMeta({
         Quer saber melhor como funciona e quais são os preços?
       </p>
       <div class="mt-10">
-        <a
-            href="mailto:"
-            class="px-6
-              py-2
-              mt-10
-              font-bold
-              text-white
-              rounded-full
-              bg-brand-main
-              focus:outline-none">
+        <a href="mailto:" class="px-6 py-2 mt-10 font-bold text-white rounded-full bg-brand-main focus:outline-none">
           Nos mande um e-mail!
         </a>
       </div>

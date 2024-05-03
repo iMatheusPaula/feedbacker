@@ -3,7 +3,11 @@ const props = defineProps({
   feedback: {type: Object, required: true},
   isOpened: {type: Boolean, default: false}
 });
-const state = reactive({
+interface State {
+  isOpen: Boolean,
+  isClosing: Boolean
+};
+const state: State = reactive({
   isOpen: props.isOpened,
   isClosing: !props.isOpened
 });
@@ -16,7 +20,6 @@ async function handleToggle(){
   state.isClosing = false;
 }
 </script>
-
 <template>
 <div @click="handleToggle" class="flex flex-col py-6 px-8 rounded cursor-pointer bg-brand-gray">
   <div class="flex items-center justify-between w-full mb-8">
@@ -37,7 +40,6 @@ async function handleToggle(){
         <span class="font-medium text-gray-700">{{ feedback.device }}</span>
       </div>
     </div>
-
     <div class="flex flex-col w-1/2">
       <div class="flex flex-col ">
         <span class="font-bold text-gray-400 uppercase select-none">Página</span>
@@ -45,13 +47,8 @@ async function handleToggle(){
       </div>
     </div>
   </div>
-
   <div class="flex justify-end mt-8" v-else>
     <IconFactory name="IconChevronDown" color="#444444"/>
   </div>
 </div>
 </template>
-
-<style scoped>
-
-</style>

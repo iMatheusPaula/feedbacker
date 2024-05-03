@@ -1,6 +1,5 @@
 <script setup>
 import {useToast} from "vue-toastification";
-
 definePageMeta({
   middleware: 'only-auth'
 });

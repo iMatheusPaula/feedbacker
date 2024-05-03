@@ -23,11 +23,6 @@ const classColor = computed(() => {
   }
 });
 </script>
-
 <template>
 <span :class="classColor" class="p-2 text-xs font-black text-white uppercase rounded-full">{{ label }}</span>
 </template>
-
-<style scoped>
-
-</style>

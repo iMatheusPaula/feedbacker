@@ -2,9 +2,8 @@
 import { reactive} from "vue";
 import { useField } from "vee-validate";
 import { useToast } from "vue-toastification";
-import useModal from "/assets/js/useModal.js";
+import useModal from "@/assets/js/useModal";
 import { validateEmptyAndLength, validateEmail } from "@/assets/js/validators";
-import Icon from '/components/iconFactory.vue'
 
 // const`s
 const modal = useModal();
@@ -30,9 +29,9 @@ const state = reactive({
 });
 
 async function HandleSubmit() {
-  toast.clear()
-  state.isLoading = true;
   try{
+    toast.clear()
+    state.isLoading = true;
     await auth.register({
       name: state.name.value,
       email: state.email.value,
@@ -46,7 +45,7 @@ async function HandleSubmit() {
   catch(error){
     toast.error('Erro Inesperado!');
     console.error(error);
-    state.hasErrors = !!error
+    state.hasErrors = !!error;
   }
   finally {
     state.isLoading = false;
@@ -54,7 +53,7 @@ async function HandleSubmit() {
 }
 </script>
 <template>
-  <div class="flex justify-between">
+  <div class="flex justify-between" id="modal-create-account">
     <h1 class="text-4xl font-black text-gray-800">Crie uma conta</h1>
     <button @click="modal.close()" class="text-4xl text-gray-600 focus:outline-none">&times;</button>
   </div>
@@ -116,14 +115,8 @@ async function HandleSubmit() {
             transition-all duration-150"
       >
         <span v-if="!state.isLoading">Criar conta</span>
-        <Icon name="Loading" v-if="state.isLoading" class="animate-spin"></Icon>
+        <IconFactory name="IconLoading" v-if="state.isLoading" class="animate-spin" />
       </button>
     </form>
   </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>

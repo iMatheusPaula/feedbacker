@@ -5,7 +5,6 @@ definePageMeta({
 });
 const auth = useAuthStore();
 const toast = useToast();
-
 async function handleGenerateApiKey(){
   try{
     await useApiFetch("/api/user/generate", {
@@ -17,18 +16,19 @@ async function handleGenerateApiKey(){
     await auth.fetchUser();
   }
   catch (error){
+    console.error(error);
     toast.error(error);
   }
 }
-
 async function handleCopy(){
-  toast.clear()
+  toast.clear();
   try{
-    await navigator.clipboard.writeText(auth.user?.api_token);
-    toast.success('Copiado')
+    await navigator.clipboard.writeText(<string>auth.user?.api_token);
+    toast.success('Copiado');
   }
   catch(error){
-
+    console.error(error);
+    toast.error('Erro ao copiar');
   }
 }
 </script>
@@ -38,12 +38,7 @@ async function handleCopy(){
     <div class="flex flex-col w-4/5 max-w-6xl py-10">
       <h1 class="text-3xl font-black text-brand-darkgray">Instalação e configuração</h1>
       <p class="mt-10 text-lg text-gray-800 font-regular">Este aqui é a sua chave de api</p>
-      <contentLoader
-        v-if="!auth.isLoggedIn"
-        class="rounded"
-        width="600px"
-        height="50px"
-      />
+      <contentLoader v-if="!auth.isLoggedIn" class="rounded" width="600px" height="50px" />
       <div v-else class="flex justify-between py-3 pl-5 pr-5 mt-2 rounded items-center bg-brand-gray w-full lg:w-1/2">
         <span class="text-brand-darkgray">{{ auth.user?.api_token }}</span>
         <div class="flex ml-20">
