@@ -14,7 +14,7 @@ export function useApiFetch<T> (url: string, options: UseFetchOptions<T> = {}) {
     }
   }
   //LOGIN HANDLER
-  return useFetch("http://127.0.0.1:8000" + url, {
+  return useFetch("https://laravel-seven-indol.vercel.app/api" + url, {
     credentials: "include",
     ...options,
     headers: {
