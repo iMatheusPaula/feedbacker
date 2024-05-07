@@ -14,21 +14,22 @@ async function handleGenerateApiKey(){
       }
     });
     await auth.fetchUser();
+    toast.success('Sua nova key foi gerada ;)');
   }
   catch (error){
     console.error(error);
-    toast.error(error);
+    toast.error('Erro ao gerar nova key ;(');
   }
 }
 async function handleCopy(){
   toast.clear();
   try{
-    await navigator.clipboard.writeText(<string>auth.user?.api_token);
-    toast.success('Copiado');
+    await navigator.clipboard.writeText(<string>auth.user?.api_token)
+    toast.success('Key copiada :)');
   }
   catch(error){
     console.error(error);
-    toast.error('Erro ao copiar');
+    toast.error('Erro ao copiar key :(');
   }
 }
 </script>
@@ -38,9 +39,8 @@ async function handleCopy(){
     <div class="flex flex-col w-4/5 max-w-6xl py-10">
       <h1 class="text-3xl font-black text-brand-darkgray">Instalação e configuração</h1>
       <p class="mt-10 text-lg text-gray-800 font-regular">Este aqui é a sua chave de api</p>
-      <contentLoader v-if="!auth.isLoggedIn" class="rounded" width="600px" height="50px" />
-      <div v-else class="flex justify-between py-3 pl-5 pr-5 mt-2 rounded items-center bg-brand-gray w-full lg:w-1/2">
-        <span class="text-brand-darkgray">{{ auth.user?.api_token }}</span>
+      <div class="flex justify-between py-3 pl-5 pr-5 mt-2 rounded items-center bg-brand-gray w-full lg:w-1/2">
+        <span class="text-brand-darkgray" id="apiKey">{{ auth.user?.api_token }}</span>
         <div class="flex ml-20">
           <iconFactory name="IconCopy" color="#C0BCB0" size="24" class="cursor-pointer"
                        @click="handleCopy"
@@ -53,8 +53,13 @@ async function handleCopy(){
       <p class="mt-5 text-lg text-gray-800 font-regular">
         Coloque o script abaixo no seu site para começar a receber feedbacks
       </p>
-      <div class="py-3 pl-5 pr-20 mt-2 rounded bg-brand-gray text-brand-darkgray w-full lg:w-1/2 overflow-x-scroll">
-        <pre>&lt;script scr="https://imatheuspaula-feedbacker-widget.netlify.app?apiKey={{auth.user?.api_token}}">&lt;/script></pre>
+      <div class="flex justify-between py-3 pl-5 pr-5 mt-2 rounded items-center bg-brand-gray w-full lg:w-1/2 overflow-x-scroll">
+        <pre class="overflow-x-scroll" id="scriptLink">&lt;script scr="https://imatheuspaula-feedbacker-widget.netlify.app?apiKey={{auth.user?.api_token}}">&lt;/script></pre>
+        <div class="flex ml-20">
+          <iconFactory name="IconCopy" color="#C0BCB0" size="24" class="cursor-pointer"
+                       @click="toast.error('função desativada')"
+          />
+        </div>
       </div>
     </div>
   </div>

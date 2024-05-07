@@ -61,7 +61,7 @@ function handleCreateAccount(){
 <style scoped>
 .header{
   @apply bg-brand-main w-full flex justify-center;
-  //height: 700px;
+  /* height: 700px; */
 }
 .header-container{
   @apply flex flex-col w-4/5 max-w-6xl;

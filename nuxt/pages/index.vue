@@ -9,6 +9,10 @@ function handleCreateAccount() {
     component: 'ModalCreateAccount'
   });
 }
+async function test() {
+  const {data} = await useApiFetch('/api/test');
+  console.log(data.value);
+}
 </script>
 <template>
   <!--  BANNER SECTION-->
@@ -27,7 +31,7 @@ function handleCreateAccount() {
         </p>
         <button
             id="home-btn-create-account"
-            @click="handleCreateAccount()"
+            @click="test()"
             class="px-6 mt-10 py-2 font-bold bg-white rounded-full text-brand-main focus:outline-none"
         >
           Crie uma conta grátis
