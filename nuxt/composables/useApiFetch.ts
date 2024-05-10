@@ -14,7 +14,7 @@ export function useApiFetch<T> (url: string, options: UseFetchOptions<T> = {}) {
     }
   }
   //LOGIN HANDLER
-  return useFetch("/laravel" + url, {
+  return useFetch("/laravel/api" + url, {
     credentials: "include",
     ...options,
     headers: {
