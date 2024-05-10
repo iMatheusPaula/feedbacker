@@ -2,6 +2,11 @@
 export default defineNuxtConfig({
   components: true,
   devtools: { enabled: true },
+  nitro: {
+      routeRules: {
+          "/laravel/**": { proxy: "https://laravel-seven-indol.vercel.app/api" }
+      }
+  },
   modules: [
       '@pinia/nuxt',
       '@pinia-plugin-persistedstate/nuxt',
