@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   components: true,
   devtools: { enabled: true },
   routeRules: {
-    '/laravel/**': { proxy: 'https://laravel-seven-indol.vercel.app' }
+    '/laravel/**': { proxy: 'https://laravel-seven-indol.vercel.app/api/**' }
   },
   modules: [
       '@pinia/nuxt',
