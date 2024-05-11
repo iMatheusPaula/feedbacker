@@ -13,6 +13,10 @@ async function test() {
   const {data} = await useApiFetch('/api/test');
   console.log(data.value);
 }
+async function testSanctum() {
+  const {data} = await useApiFetch('/api/testSanctum');
+  console.log(data.value);
+}
 </script>
 <template>
   <!--  BANNER SECTION-->
@@ -34,7 +38,14 @@ async function test() {
             @click="test()"
             class="px-6 mt-10 py-2 font-bold bg-white rounded-full text-brand-main focus:outline-none"
         >
-          Crie uma conta grátis
+         test
+        </button>
+        <button
+            id="home-btn-create-account"
+            @click="testSanctum()"
+            class="px-6 mt-10 py-2 font-bold bg-white rounded-full text-brand-main focus:outline-none"
+        >
+          test with sanctum
         </button>
       </div>
     </div>

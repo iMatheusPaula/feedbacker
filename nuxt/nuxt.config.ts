@@ -4,10 +4,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   routeRules: {
       '/laravel/**': { proxy: 'https://laravel-seven-indol.vercel.app/**' },
-      '/laravel/api/**': { proxy: 'https://laravel-seven-indol.vercel.app/api/**' },
-      '/laravel/api/api/**': { proxy: 'https://laravel-seven-indol.vercel.app/api/api/**' },
-      '/laravel/api/api/login': { proxy: 'https://laravel-seven-indol.vercel.app/api/api/login' },
-
   },
   modules: [
       '@pinia/nuxt',
