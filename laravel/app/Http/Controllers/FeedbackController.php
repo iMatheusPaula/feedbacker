@@ -21,6 +21,16 @@ class FeedbackController extends Controller
         ];
         return response()->json($feedbacks, Response::HTTP_OK);
     }
+    public function testDB()
+    {
+        $feedbacks = [
+            "all" => Feedback::all()->count(),
+            "issue" => Feedback::all()->where('type', 'ISSUE')->count(),
+            "idea" => Feedback::all()->where('type', 'IDEA')->count(),
+            "other" => Feedback::all()->where('type', 'OTHER')->count()
+        ];
+        return response()->json($feedbacks, Response::HTTP_OK);
+    }
 
 //    public function getAll(Request $request)
 //    {
