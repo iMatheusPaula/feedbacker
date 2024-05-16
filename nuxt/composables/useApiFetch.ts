@@ -14,7 +14,7 @@ export function useApiFetch<T> (url: string, options: UseFetchOptions<T> = {}) {
     }
   }
   //LOGIN HANDLER
-  return useFetch("/laravel" + url, {
+  return useFetch("http://47.254.124.113:8000" + url, {
     credentials: "include",
     ...options,
     headers: {

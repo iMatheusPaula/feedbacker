@@ -2,9 +2,6 @@
 export default defineNuxtConfig({
   components: true,
   devtools: { enabled: true },
-  routeRules: {
-      '/laravel/**': { proxy: 'http://47.254.124.113/**' },
-  },
   modules: [
       '@pinia/nuxt',
       '@pinia-plugin-persistedstate/nuxt',
