@@ -7,7 +7,7 @@ export type StoreState = {
     currentPage: string;
 };
 const initialState: StoreState = {
-    currentComponent: 'SelectFeedbackType',
+    currentComponent: 'WizardSelectFeedbackType',
     message: '',
     feedbackType: '',
     fingerprint: '',

@@ -7,7 +7,6 @@ export default {
   }
 }
 </script>
-
 <script setup lang="ts">
 type State = { component: string; }
 const state = reactive<State>({ component: 'WidgetStandby' })
