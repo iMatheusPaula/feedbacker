@@ -60,7 +60,7 @@ Defer
 Async
 onload=“init(‘{{auth.user?.api_token}}
 ’)”
-src=“http://47.254.124.113/init.js”>&lt;
+src=“http://47.254.124.113/widget/init.js”>&lt;
 /script></pre>
         <div class="flex ml-20">
           <iconFactory name="IconCopy" color="#C0BCB0" size="24" class="cursor-pointer"
