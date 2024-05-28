@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     brand: {
         main: '#EF4983',
         gray: '#F9F9F9',
@@ -128,4 +128,4 @@ module.exports = {
         800: '#19418c',
         900: '#15346b'
     }
-}
+};
