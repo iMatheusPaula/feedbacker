@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 */
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
     Route::get('/user', function (Request $request) {
         return $request->user();
     })->name('user');
@@ -26,12 +25,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/feedbacks', [\App\Http\Controllers\FeedbackController::class, 'getAll'])
         ->name('feedbacks.getAll');
+
     Route::get('/testSanctum', function (){
         return response()->json("Test with Sanctum", Response::HTTP_OK);
     })->name('testSanctum');
 
 });
-
+Route::get('/apikey/exists/{apikey}', [\App\Http\Controllers\UserTokenController::class, 'checkExistence']);
 Route::get('/feedbacks/summary', [\App\Http\Controllers\FeedbackController::class, 'getSummary'])
     ->name('feedbacks.getSummary');
 
