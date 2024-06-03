@@ -23,7 +23,7 @@ export default function useNavigation(): Navigation{
         setCurrentComponent('WizardError');
     }
     function setSucessState(): void{
-        setCurrentComponent('WizardSucess');
+        setCurrentComponent('WizardSuccess');
     }
     return { next, back, setErrorState, setSucessState }
 };
