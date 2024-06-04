@@ -4,10 +4,9 @@ function init (apiKey) {
         const page = `${window.location.origin}${window.location.pathname}`;
         // const fp = await window.FingerprintJS.load();
         const fingerprint = '124123124123';
-
-        const WIDGET_URL = `http://localhost:3000?apikey=${apiKey}${page}&fingerprint=${fingerprint}`;
+        const WIDGET_URL = `http://widget-five-gamma.vercel.app?api_key=${apiKey}&page=${page}&fingerprint=${fingerprint}`;
         const config = { method: 'HEAD'};
-        const response = await fetch (`http://localhost:8000/api/apikey/exists/${apiKey}`, config);
+        const response = await fetch (`http://127.0.0.1:8000/api/apikey/exists/${apiKey}`, config);
         if(response.status === 200) {
             const iframe = document.createElement('iframe');
             iframe.src = WIDGET_URL;
