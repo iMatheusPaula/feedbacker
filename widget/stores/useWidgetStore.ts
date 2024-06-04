@@ -6,6 +6,14 @@ export type StoreState = {
     fingerprint: string;
     currentPage: string;
 };
+export type Feedback = {
+    feedbackType: StoreState['feedbackType'];
+    message: StoreState['message'];
+    currentPage: StoreState['currentPage'];
+    apiKey: StoreState['apiKey'];
+    fingerprint: StoreState['fingerprint'],
+    device: string;
+}
 const initialState: StoreState = {
     currentComponent: 'WizardSelectFeedbackType',
     message: '',
@@ -40,5 +48,20 @@ export function resetStore (): void {
     setCurrentPage(initialState.currentPage);
     setApiKey(initialState.apiKey);
     setFingerprint(initialState.fingerprint);
+}
+export async function sendFeedback(payload: { device: string }){
+    await useApiFetch("/sanctum/csrf-cookie");
+    const sendFeedback = await useApiFetch("/api/feedbacks", {
+        method: "POST",
+        body: {
+            type: state.feedbackType,
+            text: state.message,
+            page: state.currentPage,
+            api: state.apiKey,
+            finger: state.fingerprint,
+            ...payload
+        },
+    });
+    return sendFeedback;
 }
 export default readonly(state);

@@ -1,35 +1,42 @@
 <script setup lang="ts">
 import useNavigation from "assets/ts/navigation";
-import useStore from "assets/ts/store";
-const { setErrorState } = useNavigation();
-const store = useStore();
+import {sendFeedback, setMessage} from "~/stores/useWidgetStore";
+const { setErrorState, setSucessState } = useNavigation();;
 type State = {
   feedback: string;
   isLoading: boolean;
-  hasError: Error | null;
+  hasError: any | null;
 }
 const state = reactive<State>({
   feedback: '',
   isLoading: false,
   hasError: null
 });
-function handleError(error: Error): void{
-  state.hasError = error;
-  state.isLoading = false;
-  setErrorState();
-}
 const submitButtonIsDisabled = computed<boolean>(() => {
   return !state.feedback.length;
 });
 async function submitFeedback(): Promise<void>{
-  try{
+  try {
     state.isLoading = true;
+    setMessage(state.feedback)
+    const {status}: any = await sendFeedback({
+      device: window.navigator.userAgent
+    });
+    console.log(status.value);
+    if (status.value == 'success' || status.value == 201){
+      setSucessState();
+    }
+    else{
+      setErrorState();
+    }
+  }catch (e){
+    console.error(e);
+    setErrorState();
   }
-  catch (error){
-    handleError(error);
+  finally {
+    state.isLoading = false;
   }
 }
-
 </script>
 <template>
 <div class="flex flex-col items-center justify-center w-full my-5">

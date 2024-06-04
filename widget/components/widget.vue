@@ -8,16 +8,24 @@ export default {
 }
 </script>
 <script setup lang="ts">
-type State = { component: string; }
+import useIframeControl from "assets/ts/iframe";
+import useWidgetStore from "~/stores/useWidgetStore";
+const iframe = useIframeControl();
+const store = useWidgetStore;
+type State = { component: string; }                             
 const state = reactive<State>({ component: 'WidgetStandby' })
 function handleCloseBox(): void {
   state.component = 'WidgetStandby';
+  iframe.notifyClose();
 }
 function handleOpenBox(): void {
   state.component = 'WidgetBox';
+  iframe.notifyOpen();
 }
+watch(() => store.currentComponent, () => {
+  iframe.updateCoreValuesOnStore();
+});
 </script>
-
 <template>
   <teleport to="body">
     <component :is="state.component" @open-box="handleOpenBox" @close-box="handleCloseBox" />
