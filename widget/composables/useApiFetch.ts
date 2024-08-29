@@ -1,4 +1,4 @@
-import type { UseFetchOptions } from '#app'
+import type { UseFetchOptions } from '#app';
 export function useApiFetch<T> (url: string, options: UseFetchOptions<T> = {}) {
     let headers: any = {};
     const token: string | null | undefined = useCookie('XSRF-TOKEN').value;

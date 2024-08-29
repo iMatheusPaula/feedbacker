@@ -1,23 +1,19 @@
-import type { UseFetchOptions } from '#app'
-
+import type { UseFetchOptions } from '#app';
 export function useApiFetch<T> (url: string, options: UseFetchOptions<T> = {}) {
-  let headers: any = {}
-  //GET COOKIE
-  const token: string | null | undefined = useCookie('XSRF-TOKEN').value
-  if(token){
-    headers['X-XSRF-TOKEN'] = token as string;
-  }
+  let headers: any = {};
+  const token: string | null | undefined = useCookie('XSRF-TOKEN').value;
+  if(token) headers['X-XSRF-TOKEN'] = token as string;
   if(process.server){
     headers = {
       ...headers,
       ...useRequestHeaders(["referer", "cookie"])
     }
   }
-  //LOGIN HANDLER
-  return useFetch("http://47.254.124.113:8000" + url, {
+  return useFetch(useRuntimeConfig().public.API_URL + url, {
     credentials: "include",
     ...options,
     headers: {
+      Accept: 'application/json',
       ...headers,
       ...options?.headers
     }
