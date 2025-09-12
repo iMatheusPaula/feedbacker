@@ -13,11 +13,10 @@ export default function useIframeControl(): IframeControl {
             const fingerprint = query.get('fingerprint') ?? '';
             setApiKey(apiKey);
             setCurrentPage(page);
-            setFingerprint(fingerprint);
         }
-        setApiKey('Q3eeKLymtwZAqvmknIgUBXBmzNhXBH3x8MIGRQdwlXyZ4kRFo0lzIasw66Ng');
+        setApiKey('31MfKqQzpTGmFtjtyPyfWbdfcPZdXtbtKKblK5bVRNnJPapjSbVCwOLdgWYT');
         setCurrentPage('https://test-feeedbacker.dev/');
-        setFingerprint('123451112412553456');
+        setFingerprint('1');
     }
     function notifyClose(): void{
         window.parent.postMessage({

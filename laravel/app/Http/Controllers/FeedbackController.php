@@ -31,8 +31,7 @@ class FeedbackController extends Controller
         $feedback->page = filter_var($request->page, FILTER_DEFAULT);
         $feedback->api_key = filter_var($request->api, FILTER_DEFAULT);
         $feedback->device = filter_var($request->device, FILTER_DEFAULT);
-        $feedback->fingerprint = filter_var($request->finger, FILTER_DEFAULT);
-        $feedback->user = $getIdFromApiKey;
+        $feedback->fingerprint = $getIdFromApiKey;
         $feedback->save();
         return response()->json('success', Response::HTTP_CREATED);
     }
