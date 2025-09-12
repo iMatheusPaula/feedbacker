@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations -> php artisan migrate
      *
@@ -26,14 +25,14 @@ return new class extends Migration
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
             $table->string('text');
-            $table->string('fingerprint');
+            $table->bigInteger('fingerprint');
             $table->string('api_key');
             $table->enum('type', ['ISSUE', 'IDEA', 'OTHER']);
             $table->string('device');
             $table->string('page');
             $table->timestamps();
             //add foreign api_key
-            $table->foreign('api_key')->references('api_token')->on('users')->onDelete('cascade');
+            $table->foreign('fingerprint')->references('id')->on('users');
         });
     }
 
