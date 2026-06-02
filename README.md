@@ -1,11 +1,5 @@
 # Feedbacker
 
-## Nova versão: Feedbacker 2.0
-
-Estou desenvolvendo uma versão 2.0 do Feedbacker com diversas melhorias. A nova versão pode ser encontrada no seguinte
-repositório:
-[https://github.com/imatheuspaula/feedbacker-v2](https://github.com/imatheuspaula/feedbacker-v2)
-
 ## Sobre o projeto
 
 O Feedbacker é uma aplicação web para coleta e gerenciamento de feedbacks para sites. O projeto consiste em um
